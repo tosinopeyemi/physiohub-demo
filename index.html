@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Physiohub Global - Mockup</title>
+  <style>
+    :root {
+      /* Palette A (Default) */
+      --primary: #1E88E5;
+      --secondary: #43A047;
+      --accent: #FFC107;
+      --bg: #FFFFFF;
+      --text: #212121;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      transition: background 0.4s ease, color 0.4s ease;
+    }
+
+    header {
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--primary);
+      color: white;
+      position: relative;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+
+    /* Palette Toggle Button */
+    .palette-toggle {
+      background: var(--secondary);
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.3s ease;
+    }
+    .palette-toggle:hover {
+      background: var(--accent);
+      color: var(--text);
+    }
+
+    /* Hero */
+    .hero {
+      text-align: center;
+      padding: 80px 20px;
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      color: white;
+    }
+    .hero h2 {
+      font-size: 36px;
+      margin-bottom: 20px;
+    }
+    .hero p {
+      font-size: 18px;
+      margin-bottom: 30px;
+    }
+    .hero button {
+      padding: 12px 24px;
+      font-size: 16px;
+      background: var(--accent);
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    /* Testimonials */
+    .testimonials {
+      padding: 60px 20px;
+      text-align: center;
+      background: #f9f9f9;
+    }
+    .testimonial {
+      display: none;
+      font-size: 18px;
+      max-width: 600px;
+      margin: 0 auto;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+    }
+    .testimonial.active {
+      display: block;
+      opacity: 1;
+    }
+
+    /* Dots navigation */
+    .dots {
+      margin-top: 20px;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+    }
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #ccc;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    .dot.active {
+      background: var(--primary);
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: var(--primary);
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Physiohub Global</h1>
+    <button class="palette-toggle">Palette A</button>
+  </header>
+
+  <section class="hero">
+    <h2>Health at your fingertip and at your doorstep</h2>
+    <p>Connect with medical professionals anytime, anywhere.</p>
+    <button>Book a Professional</button>
+  </section>
+
+  <section class="testimonials">
+    <h3>What Our Clients Say</h3>
+    <div class="testimonial active">“Physiohub made it easy for me to get treatment at home. Amazing service!” – Jane D.</div>
+    <div class="testimonial">“We booked medical coverage for our event, and the team was outstanding!” – Event Planner</div>
+    <div class="testimonial">“As a doctor, I love the flexibility Physiohub provides. Great platform.” – Dr. Adewale</div>
+
+    <!-- Dots -->
+    <div class="dots">
+      <div class="dot active"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 Physiohub Global</p>
+  </footer>
+
+  <script>
+    // Palette Sets
+    const palettes = {
+      A: {
+        "--primary": "#1E88E5",
+        "--secondary": "#43A047",
+        "--accent": "#FFC107",
+        "--bg": "#FFFFFF",
+        "--text": "#212121"
+      },
+      B: {
+        "--primary": "#2E7D32",
+        "--secondary": "#0288D1",
+        "--accent": "#FF7043",
+        "--bg": "#FAFAFA",
+        "--text": "#263238"
+      },
+      C: {
+        "--primary": "#6A1B9A",
+        "--secondary": "#00897B",
+        "--accent": "#FFD54F",
+        "--bg": "#FFFFFF",
+        "--text": "#1A1A1A"
+      }
+    };
+
+    const paletteKeys = Object.keys(palettes);
+    let currentPaletteIndex = 0;
+    const toggleBtn = document.querySelector(".palette-toggle");
+
+    toggleBtn.addEventListener("click", () => {
+      currentPaletteIndex = (currentPaletteIndex + 1) % paletteKeys.length;
+      const key = paletteKeys[currentPaletteIndex];
+      const palette = palettes[key];
+
+      for (const variable in palette) {
+        document.documentElement.style.setProperty(variable, palette[variable]);
+      }
+
+      toggleBtn.textContent = "Palette " + key;
+    });
+
+    // Testimonials with Auto + Manual Control
+    const testimonials = document.querySelectorAll(".testimonial");
+    const dots = document.querySelectorAll(".dot");
+    let index = 0;
+    let interval;
+
+    function showTestimonial(i) {
+      testimonials.forEach((t, idx) => {
+        t.classList.toggle("active", idx === i);
+        dots[idx].classList.toggle("active", idx === i);
+      });
+      index = i;
+    }
+
+    function startAutoSlide() {
+      interval = setInterval(() => {
+        let next = (index + 1) % testimonials.length;
+        showTestimonial(next);
+      }, 4000);
+    }
+
+    // Start auto slide
+    startAutoSlide();
+
+    // Dot click handler
+    dots.forEach((dot, i) => {
+      dot.addEventListener("click", () => {
+        clearInterval(interval);
+        showTestimonial(i);
+        startAutoSlide();
+      });
+    });
+  </script>
+</body>
+</html>
